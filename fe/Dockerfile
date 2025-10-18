@@ -19,6 +19,6 @@ COPY --from=build /app/dist /usr/share/nginx/html
 
 HEALTHCHECK --interval=30s --timeout=3s CMD curl -fsS http://localhost/ || exit 1
 
-EXPOSE 80
+EXPOSE 84
 CMD ["nginx", "-g", "daemon off;"]
 

@@ -22,7 +22,7 @@ services:
     depends_on:
       - backend
     ports:
-      - "80:80"
+      - "84:84"
     volumes:
       - ./nginx:/etc/nginx/conf.d:ro
 
