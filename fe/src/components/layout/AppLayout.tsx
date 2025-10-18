@@ -80,8 +80,13 @@ function MobileMenu() {
         </SheetTrigger>
         <SheetContent side="right" className="w-64">
           <SheetHeader>
-            <SheetTitle>
-              <span className="text-sky-600">Digi</span> Sign
+            <SheetTitle className="flex">
+              <div className="my-2">
+                <img src="favicon.png" alt="digisign" className="h-8 w-8"></img>
+              </div>
+              <div className="p-3">
+                <p className="justify-center mr-2">Digi Sign</p>
+              </div>
             </SheetTitle>
           </SheetHeader>
           <nav className="mt-4 flex flex-col gap-3 mx-3">
