@@ -1,0 +1,52 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./be
+      dockerfile: Dockerfile
+    container_name: be
+    expose:
+      - "8000"
+    environment:
+      - TZ=Asia/Manila
+      - UPLOAD_DIR=/app/uploads
+    volumes:
+      - uploads:/app/uploads
+
+  web:
+    build:
+      context: .
+      dockerfile: fe/Dockerfile
+    container_name: fe
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d:ro
+
+  cleanup:
+    build:
+      context: ./be
+      dockerfile: Dockerfile
+    container_name: cleanup
+    user: root
+    environment:
+      - TZ=Asia/Manila
+      - UPLOAD_DIR=/app/uploads
+      - MAX_AGE_HOURS=24
+    volumes:
+      - uploads:/app/uploads
+    command: >
+      sh -c "apt-get update -qq && apt-get install -y -qq cron &&
+             mkdir -p /etc/cron.d &&
+             echo '0 2 * * * /usr/local/bin/python3 -u /app/app/utils/cron/cleanup.py >> /var/log/cleanup.log 2>&1' > /etc/cron.d/cleanup &&
+             chmod 0644 /etc/cron.d/cleanup &&
+             crontab /etc/cron.d/cleanup &&
+             touch /var/log/cleanup.log &&
+             cron && tail -f /var/log/cleanup.log"
+    restart: unless-stopped
+
+volumes:
+  uploads:
