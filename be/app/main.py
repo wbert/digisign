@@ -6,16 +6,22 @@ from .utils.signer.name_search import NameSearch
 from .routers.sign_router import SignRouter
 from .routers.upload_router import router as upload_router
 from .middleware.rate_limit import rate_limit_middleware
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 app = FastAPI()
 
+origins = os.getenv("ALLOWED_ORIGINS", "").split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://172.20.10.2/", "http://localhost:5174", "http://localhost/"],
+    allow_origins=origins,
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 app.middleware("http")(rate_limit_middleware)
 
 # init your service
