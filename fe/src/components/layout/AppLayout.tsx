@@ -61,7 +61,6 @@ function AppHeader() {
               Demo
             </Link>
           </div>
-          <InstallPWAButton />
           <MobileMenu />
         </nav>
       </div>
@@ -150,46 +149,6 @@ function AppFooter() {
  * Lightweight "Install App" button using the `beforeinstallprompt` event.
  * Shows only when the browser is installable and not already installed.
  */
-function InstallPWAButton() {
-  const [deferred, setDeferred] = useState<BeforeInstallPromptEvent | null>(
-    null,
-  );
-  const [canInstall, setCanInstall] = useState(false);
-
-  useEffect(() => {
-    const onBeforeInstallPrompt = (e: Event) => {
-      e.preventDefault();
-      setDeferred(e as BeforeInstallPromptEvent);
-      setCanInstall(true);
-    };
-    const onAppInstalled = () => setCanInstall(false);
-
-    window.addEventListener("beforeinstallprompt", onBeforeInstallPrompt);
-    window.addEventListener("appinstalled", onAppInstalled);
-    return () => {
-      window.removeEventListener("beforeinstallprompt", onBeforeInstallPrompt);
-      window.removeEventListener("appinstalled", onAppInstalled);
-    };
-  }, []);
-
-  if (!canInstall || !deferred) return null;
-
-  return (
-    <Button
-      size="sm"
-      onClick={async () => {
-        await deferred.prompt();
-        // optional: check outcome
-        const choice = await deferred.userChoice;
-        // console.log(choice.outcome) // 'accepted' | 'dismissed'
-        setDeferred(null);
-        setCanInstall(false);
-      }}
-    >
-      Install App
-    </Button>
-  );
-}
 
 // TS helper for the PWA event
 declare global {
