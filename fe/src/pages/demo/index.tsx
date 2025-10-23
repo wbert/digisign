@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import { PageSpinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
 import {
   Select,
@@ -207,8 +208,18 @@ export default function DemoSignPage() {
 
             <div className="flex items-end gap-3">
               <Button disabled={!canUpload || isUploading} onClick={onUpload}>
-                {isUploading ? "Uploading…" : "Upload"}
-              </Button>
+                               {" "}
+                {isUploading ? (
+                  <>
+                                       {" "}
+                    <PageSpinner className="mr-2 h-4 w-4 animate-spin" />       
+                                Uploading…                  {" "}
+                  </>
+                ) : (
+                  "Upload"
+                )}
+                             {" "}
+              </Button>{" "}
               <Button variant="ghost" onClick={onReset}>
                 Reset
               </Button>
@@ -273,9 +284,18 @@ export default function DemoSignPage() {
               {/* CLEANUP: The button group now only contains the action button */}
               <div className="flex items-end gap-3">
                 <Button disabled={!canSign || isSigning} onClick={onSign}>
-                  {isSigning ? "Signing…" : "Sign PDF"}
+                                   {" "}
+                  {isSigning ? (
+                    <>
+                                           {" "}
+                      <PageSpinner className="mr-2 h-4 w-4 animate-spin" />     
+                                      Signing…                    {" "}
+                    </>
+                  ) : (
+                    "Sign PDF"
+                  )}
+                                 {" "}
                 </Button>
-
                 {/* BADGE REMOVED FROM HERE */}
               </div>
             </CardContent>
